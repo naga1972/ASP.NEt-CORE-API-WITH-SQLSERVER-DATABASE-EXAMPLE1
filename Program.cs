@@ -15,6 +15,20 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<MyDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+//STEP-1 This fixes CORS issue on the ReactJS web app Front end that runs at http://localhost:5173
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReactApp",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:5173")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
+
+
+
 var app = builder.Build();
 // Enable Swagger for testing API endpoints
 if (app.Environment.IsDevelopment())
@@ -24,6 +38,8 @@ if (app.Environment.IsDevelopment())
 }
 app.UseHttpsRedirection();
 
+//STEP-2 This fixes CORS issue on the ReactJS web app Front end that runs at http://localhost:5173
+app.UseCors("AllowReactApp");
 
 app.UseAuthorization();
 
