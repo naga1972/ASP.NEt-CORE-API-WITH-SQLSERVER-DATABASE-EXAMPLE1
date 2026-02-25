@@ -11,9 +11,13 @@ builder.Services.AddSwaggerGen();
 // Add services
 builder.Services.AddControllers();
 
-// Register DbContext
+// Register DbContext for SQLSERVER
+/*builder.Services.AddDbContext<MyDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));*/
+
+// Register DbContext for SQLITE
 builder.Services.AddDbContext<MyDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 //STEP-1 This fixes CORS issue on the ReactJS web app Front end that runs at http://localhost:5173
 builder.Services.AddCors(options =>
